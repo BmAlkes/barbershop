@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import Image from "next/image";
 import Search from "./_component/search";
+import BookingItem from "./_component/booking-item";
 
 export default function Home() {
   return (
@@ -13,6 +14,10 @@ export default function Home() {
       </div>
       <div className="px-5 mt-6">
         <Search />
+      </div>
+      <div className="px-5 mt-6">
+        <h2 className="text-sm font-bold mb-4">Schedules</h2>
+        <BookingItem />
       </div>
     </main>
   );
