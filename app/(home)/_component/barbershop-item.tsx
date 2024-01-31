@@ -3,6 +3,8 @@ import React from "react";
 import { Barbershop } from "@prisma/client";
 import Image from "next/image";
 import { Button } from "@/app/_components/ui/button";
+import { Badge } from "@/app/_components/ui/badge";
+import { StarIcon } from "lucide-react";
 
 interface BarbershopItemProps {
   barbershop: Barbershop;
@@ -13,6 +15,15 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
     <Card className="min-w-[167px] max-w-[167px] rounded-2xl">
       <CardContent className="p-1 py-0">
         <div className="px-1 relative w-full h-[159px]">
+          <div className="absolute top-3 left-2 z-50">
+            <Badge
+              variant="secondary"
+              className=" flex items-center  justify-center gap-2 opacity-75"
+            >
+              <StarIcon size={12} className="fill-primary text-primary" />
+              <span className="text-xs">5,0</span>
+            </Badge>
+          </div>
           <Image
             src={barbershop.imageUrl}
             className="h-[159px] w-full rounded-2xl object-cover"
