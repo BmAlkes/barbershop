@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import Image from "next/image";
 import Search from "./_component/search";
 import BookingItem from "./_component/booking-item";
 import BarbershopItem from "./_component/barbershop-item";
