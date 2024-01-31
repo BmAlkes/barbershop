@@ -2,8 +2,11 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Search from "./_component/search";
 import BookingItem from "./_component/booking-item";
+import BarbershopItem from "./_component/barbershop-item";
+import { db } from "../_lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  const barbershops = await db.barbershop.findMany({});
   return (
     <main>
       <div className="px-5 pt-5">
@@ -16,8 +19,16 @@ export default function Home() {
         <Search />
       </div>
       <div className="px-5 mt-6">
-        <h2 className="text-sm font-bold mb-4">Schedules</h2>
+        <h2 className="text-sm uppercase font-bold mb-4">Schedules</h2>
         <BookingItem />
+      </div>
+      <div className="px-5 mt-6">
+        <h2 className="text-sm uppercase font-bold mb-4">Recommended</h2>
+        <div className="flex  gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {barbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
       </div>
     </main>
   );
