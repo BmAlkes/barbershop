@@ -96,7 +96,8 @@ async function seedDatabase() {
         name: "Hydration",
         description: "Deep hydration for hair and beard.",
         price: 25.0,
-        imageUrl: "Fios hidratados, macios e brilhantes.",
+        imageUrl:
+          "https://utfs.io/f/c4919193-a675-4c47-9f21-ebd86d1c8e6a-4oen2a.png.",
       },
     ];
 
