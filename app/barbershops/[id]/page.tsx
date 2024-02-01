@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import BarbershopInfo from "./_components/barbershop-info";
+import ServicesItem from "./_components/service-item";
 
 interface BarbershopDetailsPageProps {
   params: any;
@@ -22,23 +23,25 @@ const BarbershopDetailsPage = async ({
     where: {
       id: params.id,
     },
+    include: {
+      services: true,
+    },
   });
   if (!barbershop) {
     return null;
   }
+
   return (
     <div>
       <BarbershopInfo barbershop={barbershop} />
-      <div className="px-5 pt-3 pb-6 border-b border-solid border-secondary">
-        <h1 className="text-xl font-bold py-3">{barbershop?.name}</h1>
-        <div className="flex items-center gap-2 mt-2">
-          <MapPinIcon className="stroke-primary" size={18} />
-          <p className="text-sm">{barbershop?.address}</p>
+      <div className="px-5 flex flex-col gap-3 py-6 ">
+        <div className="flex gap-3">
+          <Button>Services</Button>
+          <Button variant="secondary">Information</Button>
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          <StarIcon className="stroke-primary" size={18} />
-          <p className="text-sm">5,0 (899 avaliation)</p>
-        </div>
+        {barbershop.services.map((service) => (
+          <ServicesItem key={service.id} service={service} />
+        ))}
       </div>
     </div>
   );
