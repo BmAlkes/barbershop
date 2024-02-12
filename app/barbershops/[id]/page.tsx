@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/app/_components/ui/button";
 import { db } from "@/app/_lib/prisma";
 import { redirect } from "next/navigation";
@@ -7,12 +8,12 @@ import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_lib/auth";
 
-export interface BarbershopDetailsPageProps {
+interface BarbershopDetailsPageProps {
   params: any;
   id?: string;
 }
 
-export const BarbershopDetailsPage = async ({
+const BarbershopDetailsPage = async ({
   params,
 }: BarbershopDetailsPageProps) => {
   const session = await getServerSession(authOptions);
@@ -52,3 +53,5 @@ export const BarbershopDetailsPage = async ({
     </div>
   );
 };
+
+export default BarbershopDetailsPage;
