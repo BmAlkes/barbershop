@@ -12,7 +12,7 @@ export interface BarbershopDetailsPageProps {
   id?: string;
 }
 
-const BarbershopDetailsPage = async ({
+export const BarbershopDetailsPage = async ({
   params,
 }: BarbershopDetailsPageProps) => {
   const session = await getServerSession(authOptions);
@@ -52,5 +52,3 @@ const BarbershopDetailsPage = async ({
     </div>
   );
 };
-
-export default BarbershopDetailsPage;
