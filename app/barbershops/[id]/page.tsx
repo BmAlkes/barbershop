@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/app/_components/ui/button";
 import { db } from "@/app/_lib/prisma";
 import { redirect } from "next/navigation";
