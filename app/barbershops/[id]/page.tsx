@@ -3,7 +3,6 @@ import { db } from "@/app/_lib/prisma";
 import { redirect } from "next/navigation";
 import BarbershopInfo from "./_components/barbershop-info";
 import ServicesItem from "./_components/service-item";
-import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_lib/auth";
 
