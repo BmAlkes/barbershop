@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_lib/auth";
 
-interface BarbershopDetailsPageProps {
+export interface BarbershopDetailsPageProps {
   params: any;
   id?: string;
 }
