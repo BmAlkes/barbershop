@@ -42,6 +42,7 @@ const BarbershopDetailsPage = async ({
         </div>
         {barbershop.services.map((service) => (
           <ServicesItem
+            barbershop={barbershop}
             key={service.id}
             service={service}
             isAutheticated={!!session?.user}
