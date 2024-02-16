@@ -20,6 +20,8 @@ import { format, setHours, setMinutes } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { saveBooking } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ServicesItemProps {
   service: Service;
@@ -36,6 +38,8 @@ const ServicesItem = ({
   const [hour, setHour] = React.useState<String | undefined>();
   const { data } = useSession();
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
+  const [sheetIsOpen, setSheetIsOpen] = useState(false);
+  const router = useRouter();
 
   const handleBookingClick = () => {
     if (!isAutheticated) {
@@ -73,6 +77,16 @@ const ServicesItem = ({
         date: newDate,
         userId: (data.user as any).id,
       });
+      setSheetIsOpen(false);
+      setHour(undefined);
+      setDate(undefined);
+      toast("Reservation made successfully", {
+        description: format(date, "dd 'of' MMMM 'at' HH:mm"),
+        action: {
+          label: "Undo",
+          onClick: () => router.push("/bookings"),
+        },
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -102,7 +116,7 @@ const ServicesItem = ({
                   currency: "ILS",
                 }).format(Number(service.price))}
               </p>
-              <Sheet>
+              <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>
                     Schedule
