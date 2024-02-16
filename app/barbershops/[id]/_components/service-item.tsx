@@ -171,7 +171,9 @@ const ServicesItem = ({
                     </Card>
                   </div>
                   <SheetFooter className="px-5">
-                    <Button className="w-full">Confirme Schedule</Button>
+                    <Button className="w-full" disabled={!hour || !date}>
+                      Confirme Schedule
+                    </Button>
                   </SheetFooter>
                 </SheetContent>
               </Sheet>
