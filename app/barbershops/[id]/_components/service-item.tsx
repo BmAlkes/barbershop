@@ -93,7 +93,7 @@ const ServicesItem = ({
       setHour(undefined);
       setDate(undefined);
       toast("Reservation made successfully", {
-        description: format(date, "dd 'of' MMMM 'at' HH:mm"),
+        description: format(date, "dd 'of' MMMM '"),
         action: {
           label: "Undo",
           onClick: () => router.push("/bookings"),
