@@ -10,11 +10,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { Barbershop, Service } from "@prisma/client";
+import { Barbershop, Booking, Service } from "@prisma/client";
 
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../hours";
 import { format, setHours, setMinutes } from "date-fns";
 import { enUS } from "date-fns/locale";
@@ -22,6 +22,7 @@ import { saveBooking } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getDayBookings } from "../_actions/get-bookings";
 
 interface ServicesItemProps {
   service: Service;
@@ -34,12 +35,26 @@ const ServicesItem = ({
   isAutheticated,
   barbershop,
 }: ServicesItemProps) => {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [hour, setHour] = React.useState<String | undefined>();
   const { data } = useSession();
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
   const [sheetIsOpen, setSheetIsOpen] = useState(false);
+  const [dayBookings, setDayBookings] = useState<Booking[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+
+    const refreshAvailableHours = async () => {
+      const _dayBookings = await getDayBookings(date);
+      setDayBookings(_dayBookings);
+    };
+
+    refreshAvailableHours();
+  }, [date, barbershop.id]);
 
   const handleBookingClick = () => {
     if (!isAutheticated) {
@@ -48,9 +63,6 @@ const ServicesItem = ({
 
     //futuro modal de agendamentos
   };
-  const timeList = useMemo(() => {
-    return date ? generateDayTimeList(date) : [];
-  }, [date]);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -93,6 +105,29 @@ const ServicesItem = ({
       setSubmitIsLoading(false);
     }
   };
+  const timeList = useMemo(() => {
+    if (!date) {
+      return [];
+    }
+
+    return generateDayTimeList(date).filter((time) => {
+      const timeHour = Number(time.split(":")[0]);
+      const timeMinutes = Number(time.split(":")[1]);
+
+      const booking = dayBookings.find((booking) => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinutes = booking.date.getMinutes();
+
+        return bookingHour === timeHour && bookingMinutes === timeMinutes;
+      });
+
+      if (!booking) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [date, dayBookings]);
   return (
     <Card>
       <CardContent className="p-3 w-full">
@@ -122,10 +157,12 @@ const ServicesItem = ({
                     Schedule
                   </Button>
                 </SheetTrigger>
+
                 <SheetContent className="p-0 ">
                   <SheetHeader className="text-left px-5 py-6 border-b border-solid border-secondary">
                     <SheetTitle>Make a Reservation</SheetTitle>
                   </SheetHeader>
+
                   <div className="py-6">
                     <Calendar
                       mode="single"
