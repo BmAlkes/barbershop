@@ -6,7 +6,7 @@ interface SaveBookingsService {
   barbershopId: string;
   serviceId: string;
   userId: string;
-  date: string;
+  date: Date;
 }
 
 export const saveBooking = async (params: SaveBookingsService) => {
