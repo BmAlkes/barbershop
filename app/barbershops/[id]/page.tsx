@@ -1,22 +1,23 @@
-import { Button } from "@/app/_components/ui/button";
 import { db } from "@/app/_lib/prisma";
-import { redirect } from "next/navigation";
 import BarbershopInfo from "./_components/barbershop-info";
-import ServicesItem from "./_components/service-item";
+import ServiceItem from "./_components/service-item";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/_lib/auth";
 
 interface BarbershopDetailsPageProps {
-  params: any;
-  id?: string;
+  params: {
+    id?: string;
+  };
 }
 
 const BarbershopDetailsPage = async ({
   params,
 }: BarbershopDetailsPageProps) => {
   const session = await getServerSession(authOptions);
+
   if (!params.id) {
-    redirect("/");
+    // TODO: redirecionar para home page
+    return null;
   }
 
   const barbershop = await db.barbershop.findUnique({
@@ -27,24 +28,23 @@ const BarbershopDetailsPage = async ({
       services: true,
     },
   });
+
   if (!barbershop) {
+    // TODO: redirecionar para home page
     return null;
   }
 
   return (
     <div>
       <BarbershopInfo barbershop={barbershop} />
-      <div className="px-5 flex flex-col gap-3 py-6 ">
-        <div className="flex gap-3">
-          <Button>Services</Button>
-          <Button variant="secondary">Information</Button>
-        </div>
+
+      <div className="px-5 flex flex-col gap-4 py-6">
         {barbershop.services.map((service) => (
-          <ServicesItem
-            barbershop={barbershop}
+          <ServiceItem
             key={service.id}
+            barbershop={barbershop}
             service={service}
-            isAutheticated={!!session?.user}
+            isAuthenticated={!!session?.user}
           />
         ))}
       </div>

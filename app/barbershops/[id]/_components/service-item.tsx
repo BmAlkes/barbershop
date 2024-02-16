@@ -26,13 +26,13 @@ import { getDayBookings } from "../_actions/get-bookings";
 
 interface ServicesItemProps {
   service: Service;
-  isAutheticated?: boolean;
+  isAuthenticated?: boolean;
   barbershop: Barbershop;
 }
 
 const ServicesItem = ({
   service,
-  isAutheticated,
+  isAuthenticated,
   barbershop,
 }: ServicesItemProps) => {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
@@ -49,7 +49,7 @@ const ServicesItem = ({
     }
 
     const refreshAvailableHours = async () => {
-      const _dayBookings = await getDayBookings(date);
+      const _dayBookings = await getDayBookings(barbershop.id, date);
       setDayBookings(_dayBookings);
     };
 
@@ -57,7 +57,7 @@ const ServicesItem = ({
   }, [date, barbershop.id]);
 
   const handleBookingClick = () => {
-    if (!isAutheticated) {
+    if (!isAuthenticated) {
       return signIn("google");
     }
 
